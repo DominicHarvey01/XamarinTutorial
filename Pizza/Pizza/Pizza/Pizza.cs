@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PizzaInternetConsole
+namespace Pizza
 {
     class Pizza
     {
@@ -29,6 +29,26 @@ namespace PizzaInternetConsole
             Console.WriteLine(String.Join(", ", ingredients));
             Console.WriteLine("");
 
+        }
+
+        // a function
+        public int GetPrix()
+        {
+            return prix;
+        }
+        // a property
+        public int Prix
+        {
+            get { return prix; }
+        }
+
+        public string GetNom()
+        {
+            return nom;
+        }
+        public string Nom
+        {
+            get { return nom; }
         }
     }
 }

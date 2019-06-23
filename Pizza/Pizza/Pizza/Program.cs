@@ -14,13 +14,13 @@ using Newtonsoft.Json;
 
 
 
-namespace PizzaInternetConsole
+namespace Pizza
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //const string URL = "https://codeavecjonathan.com/res/pizzas1.json";
+            //const string URL = "https://codeavecjonathan.com/res/pizzas3.json";
             //string pizzasJson = "[{\"nom\":\"4 fromage\",\"prix\":\"10\",  \"ingredients\":[\"fromage1\",\"fromage2\",\"fromage3\",\"fromage4\"]},{\"nom\":\"Vegé\",\"prix\":\"7\",\"ingredients\":[\"Tomate\", \"Poivron\"]}]";
 
             /*
@@ -31,7 +31,7 @@ namespace PizzaInternetConsole
              * 5. obtenir un lien de téléchargement pour le lien généré à l'étape #2.
              * 6. utiliser ce nouveau lien pour le url du web client
              */
-                         const string URL = "https://drive.google.com/uc?export=download&id=1emTVEI8VnlyQsawQv3yPATrOQbDhHZnT";
+              const string URL = "https://drive.google.com/uc?export=download&id=1Dqv7ANJ8Omwq-Qn6CFgPk_waLlbSwQRV";
 
             
             /*
@@ -65,11 +65,27 @@ namespace PizzaInternetConsole
                     return;
                 }
             }
-            
+
 
             // Loading json data into variable.
-            List<Pizza> pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzasJson);
+            /**
+             * DESERIALIZATION
+             */
+            ContenuJson contenuJson = JsonConvert.DeserializeObject<ContenuJson>(pizzasJson);
+            List<Pizza> pizzas = contenuJson.pizzas;
 
+
+           
+
+            if (contenuJson.reglages.tri.Equals("prix"))
+            {
+                // sorting by price using lamda expression.
+                pizzas.Sort((p1, p2) => { return p2.Prix.CompareTo(p1.Prix); });
+            }
+            else if (contenuJson.reglages.tri.Equals("nom"))
+            {
+                pizzas.Sort((p1, p2) => { return p1.Nom.CompareTo(p2.Nom); });
+            }
 
 
             foreach (Pizza p in pizzas)

@@ -1,0 +1,118 @@
+{
+  "pizzas": [{
+      "nom": "All dress",
+      "ingredients": ["pépéroni", "mozzarella", "champigion", "sauce pizza"],
+      "prix": 22,
+      "vegetarienne": false
+    },
+    {
+      "nom": "4 fromages",
+      "ingredients": ["cantal", "mozzarella", "fromage de chèvre", "gruyère"],
+      "prix": 11,
+      "vegetarienne": true
+    },
+    {
+      "nom": "tartiflette",
+      "ingredients": [
+        "pomme de terre",
+        "oignons",
+        "crème fraiche",
+        "lardons",
+        "mozzarella"
+      ],
+      "prix": 14,
+      "vegetarienne": true
+    },
+    {
+      "nom": "margherita",
+      "ingredients": ["sauce tomate", "mozzarella", "basilic"],
+      "prix": 7,
+      "vegetarienne": true
+    },
+    {
+      "nom": "indienne",
+      "ingredients": [
+        "curry",
+        "mozzarella",
+        "poulet",
+        "poivron",
+        "oignon",
+        "coriandre"
+      ],
+      "prix": 10,
+      "vegetarienne": false
+    },
+    {
+      "nom": "mexicaine",
+      "ingredients": [
+        "boeuf",
+        "mozzarella",
+        "maïs",
+        "tomates",
+        "oignon",
+        "coriandre"
+      ],
+      "prix": 13,
+      "vegetarienne": false
+    },
+    {
+      "nom": "chèvre et miel",
+      "ingredients": ["miel", "mozzarella", "fromage de chèvre", "roquette"],
+      "prix": 10,
+      "vegetarienne": true
+    },
+    {
+      "nom": "napolitaine",
+      "ingredients": ["sauce tomate", "mozzarella", "anchois", "câpres"],
+      "prix": 9,
+      "vegetarienne": false
+    },
+    {
+      "nom": "kebab",
+      "ingredients": [
+        "poulet",
+        "oignons",
+        "sauce tomate",
+        "sauce kebab",
+        "mozzarella"
+      ],
+      "prix": 11,
+      "vegetarienne": false
+    },
+    {
+      "nom": "louisiane",
+      "ingredients": [
+        "poulet",
+        "champignons",
+        "poivrons",
+        "oignons",
+        "sauce tomate",
+        "mozzarella"
+      ],
+      "prix": 12,
+      "vegetarienne": false
+    },
+    {
+      "nom": "orientale",
+      "ingredients": ["merguez", "champignons", "sauce tomate", "mozzarella"],
+      "prix": 11,
+      "vegetarienne": false
+    },
+    {
+      "nom": "hawaïenne",
+      "ingredients": ["jambon", "ananas", "sauce tomate", "mozzarella"],
+      "prix": 12,
+      "vegetarienne": false
+    },
+    {
+      "nom": "reine",
+      "ingredients": ["jambon", "champignons", "sauce tomate", "mozzarella"],
+      "prix": 8,
+      "vegetarienne": false
+    }
+  ],
+  "reglages": {
+    "tri": "prix"
+  }
+
+}
