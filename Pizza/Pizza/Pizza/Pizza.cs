@@ -11,17 +11,21 @@ namespace PizzaInternetConsole
         private string nom;
         private int prix;
         string[] ingredients;
+        bool vegetarienne;
 
-        public Pizza(string nom, int prix, string[] ingredients)
+        public Pizza(string nom, int prix, string[] ingredients, bool vegetarienne)
         {
             this.nom = nom;
             this.prix = prix;
             this.ingredients = ingredients;
+            this.vegetarienne = vegetarienne;
         }
 
         public void Afficher()
         {
-            Console.WriteLine("Pizza:" + nom + " - " + prix + " $ ");
+            string vege = vegetarienne ? " (V)" : "";            
+
+            Console.WriteLine("Pizza:" + nom + vege + " - " + prix + " $ ");
             Console.WriteLine(String.Join(", ", ingredients));
             Console.WriteLine("");
 
