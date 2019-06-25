@@ -10,19 +10,16 @@ using Xamarin.Forms.Xaml;
 namespace lelab.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CountPage : ContentPage
+    public partial class MenuPage : ContentPage
     {
-        int count = 0;
-        public CountPage()
+        public MenuPage()
         {
             InitializeComponent();
         }
 
-        private void CountButtonClick(object sender, EventArgs e)
+        private void Counter_btn_Clicked(object sender, EventArgs e)
         {
-            //count++;
-            lblCount.Text = (++count).ToString();
-
+            this.Navigation.PushAsync(new CountPage());
         }
     }
 }
