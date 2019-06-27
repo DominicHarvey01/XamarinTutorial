@@ -11,7 +11,7 @@
         <StackLayout Spacing="0" Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <StackLayout BackgroundColor="#518faa" Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
                 <Image Margin="0,35,0,0" Source="lab_logo.png" HeightRequest="100"/>
-                <Label FontAttributes="Bold"  Margin="0,10,0,30"   TextColor="White" HorizontalTextAlignment="Center" Text="LE LAB" FontSize="30" >
+                <Label   Margin="0,10,0,30"   TextColor="White" HorizontalTextAlignment="Center" Text="LE LAB" FontSize="30" >
                     <Label.FontFamily>
                         <OnPlatform x:TypeArguments="x:String">
                             <OnPlatform.iOS>HelveticaNeue-Thin</OnPlatform.iOS>
@@ -23,7 +23,9 @@
             </StackLayout>
             <Image Source="lab_separator.png" HorizontalOptions="FillAndExpand"/>
             <StackLayout Margin="30,0" Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                    <Button Margin="0,20,0,0" Style="{StaticResource boutonLabStyle}" BackgroundColor="#c1ab24" Text="CONTEUR" Clicked="Counter_btn_Clicked" HorizontalOptions="FillAndExpand"/>
+                <Button Margin="0,20,0,0" Style="{StaticResource boutonLabStyle}" BackgroundColor="#c1ab24" Text="CONTEUR" Clicked="Counter_btn_Clicked" HorizontalOptions="FillAndExpand"/>
+                <Button Margin="0,20,0,0" Style="{StaticResource boutonLabStyle}" BackgroundColor="#a4881c" Text="TABS" Clicked="Tabs_btn_Clicked" HorizontalOptions="FillAndExpand"/>
+                <Button Margin="0,20,0,0" Style="{StaticResource boutonLabStyle}" BackgroundColor="#c60e3c" Text="LIST" Clicked="List_btn_Clicked" HorizontalOptions="FillAndExpand"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

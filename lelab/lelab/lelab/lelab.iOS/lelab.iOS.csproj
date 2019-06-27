@@ -147,4 +147,25 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </BundleResource>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\lab_avion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\lab_voiture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\lab_icon_avion%403x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\lab_icon_compteur%403x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\lab_icon_voiture%403x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </BundleResource>
+  </ItemGroup>
 </Project>

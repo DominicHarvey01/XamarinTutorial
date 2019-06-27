@@ -7,14 +7,21 @@
              x:Class="lelab.Views.CountPage"
              Title="Compteur">
     <ContentPage.Content>
-        <StackLayout Spacing="0" Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
-            <Label x:Name="lblCount" Text="0" FontSize="80" TextColor="Gray"                
-                HorizontalOptions="Center" />
-            <Button Style="{StaticResource boutonLabStyle}" Text="Compter" Margin="0,0,0,0" Clicked="CountButtonClick"/>
-            
-
-<Label Text="" />
-
-        </StackLayout>
+        <StackLayout Spacing="0" Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout BackgroundColor="#518faa" Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                <Label x:Name="lblCount" Text="0" Margin="0,40" FontSize="80" TextColor="White" HorizontalOptions="Center" >
+                    <Label.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <OnPlatform.iOS>HelveticaNeue-Thin</OnPlatform.iOS>
+                            <OnPlatform.Android>HelveticaNeue-Thin.ttf#HelveticaNeue-Thin</OnPlatform.Android>
+                        </OnPlatform>
+                    </Label.FontFamily>
+                </Label>
+            </StackLayout>
+            <Image Source="lab_separator.png" HorizontalOptions="FillAndExpand"/>
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HasShadow="False" Padding="40">
+                <Button Style="{StaticResource boutonLabStyle}" Text="Compter" Clicked="CountButtonClick" HorizontalOptions="Fill" VerticalOptions="Center"/>
+            </Frame>
+        </StackLayout>        
     </ContentPage.Content>
 </ContentPage>
