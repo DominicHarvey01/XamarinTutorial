@@ -1,0 +1,91 @@
+[1] COULEUR GLOBALE DES PAGES
+-----------------------------
+
+<ResourceDictionary>
+	<Style TargetType="NavigationPage" ApplyToDerivedTypes="True">
+		<Setter Property="BackgroundColor" Value="#ff0000" />
+	</Style>
+</ResourceDictionary>
+
+
+[2] COULEURS DE LA NAVIGATION PAGE
+----------------------------------
+
+<Style TargetType="NavigationPage">
+	<Setter Property="BarBackgroundColor" Value="#ff5300"/>
+	<Setter Property="BarTextColor" Value="White"/>
+</Style>
+
+
+[3] STYLE EXPLICITE
+-------------------
+
+<Style x:Key="boutonLabStyle" TargetType="Button">
+	<Setter Property="BackgroundColor" Value="Yellow" />
+</Style>
+            
+         
+[4] POLICE D'ECRITURE
+---------------------
+            
+<Label.FontFamily>
+	<OnPlatform x:TypeArguments="x:String">
+		<OnPlatform.iOS>HelveticaNeue-Thin</OnPlatform.iOS>
+		<OnPlatform.Android>HelveticaNeue-Thin.ttf#HelveticaNeue-Thin</OnPlatform.Android>
+	</OnPlatform>
+</Label.FontFamily>
+
+
+[5] COULEURS DE LA BARRE DES TABS
+---------------------------------
+
+<TabbedPage.BarBackgroundColor>
+	<OnPlatform x:TypeArguments="Color">
+		<OnPlatform.iOS>White</OnPlatform.iOS>
+		<OnPlatform.Android>#508ca7</OnPlatform.Android>
+	</OnPlatform>
+</TabbedPage.BarBackgroundColor>
+
+
+[6] SPLASHSCREEN ANDROID
+------------------------
+
+<style name="splashscreen" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowBackground">@drawable/splash</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowIsTranslucent">false</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:backgroundDimEnabled">true</item>
+</style>
+
+
+
+[Activity(Icon = "@drawable/icon", Theme = "@style/splashscreen", MainLauncher = true, NoHistory = true)]
+public class SplashActivity : AppCompatActivity
+{
+    protected override void OnResume()
+    {
+        base.OnResume();
+        StartActivity(typeof(MainActivity));
+    }
+}
+
+
+[7] PUBLICATION ANDROID
+------------------------
+
+#if DEBUG
+[assembly: Application(Debuggable = true)]
+#else
+[assembly: Application(Debuggable=false)]
+#endif
+
+[8] PUBLICATION IOS
+-------------------
+
+<key>UIRequiresFullScreen</key>
+<string>YES</string>
+
+
+
+    
