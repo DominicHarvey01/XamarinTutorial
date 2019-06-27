@@ -1,0 +1,16 @@
+
+STYLE
+-----
+
+<ResourceDictionary>
+    <Style TargetType="NavigationPage" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="#f4c723" />
+    </Style>
+    <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="#f4c723" />
+    </Style>   
+    <Color x:Key="titleColor">#60593b</Color>
+    <Color x:Key="shadowColor">#dcb51a</Color>
+</ResourceDictionary>  
+
+
