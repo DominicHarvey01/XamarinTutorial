@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="NombreMagique.Views.WelcomePage">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="Center" >
+            <Label Text="Le nombre"
+                VerticalOptions="Center" 
+                HorizontalOptions="CenterAndExpand" 
+                HorizontalTextAlignment="Center"
+                FontSize="50"
+                TextColor="{StaticResource titleColor}"/>
+            <Label Text="Magique"
+                VerticalOptions="Center" 
+                HorizontalOptions="CenterAndExpand" 
+                HorizontalTextAlignment="Center"
+                FontSize="50"
+                TextColor="{StaticResource titleColor}"/>
+            <Button 
+                HorizontalOptions="Center"
+                WidthRequest="110"
+                BackgroundColor="{StaticResource shadowColor}"
+                TextColor="White"
+                Clicked="Play_Button_Clicked" 
+                Margin="0,20,0,0"
+                Text="Jouer"/>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
