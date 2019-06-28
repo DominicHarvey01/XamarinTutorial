@@ -79,9 +79,10 @@ namespace NombreMagique.Views
         }
         private async Task WinAction()
         {
-            await DisplayAlert("You WIN", "Le nombre magic est exact", "OK");
+            //await DisplayAlert("You WIN", "Le nombre magic est exact", "OK");
+            await Navigation.PushAsync(new WinPage(magic_number));
             // moving back to home page (previous page in fact)
-            await this.Navigation.PopAsync();
+            //await this.Navigation.PopAsync();
         }
     }
 }
