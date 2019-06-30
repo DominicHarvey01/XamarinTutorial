@@ -11,7 +11,7 @@ namespace NombreMagique
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new WelcomePage()); 
+            MainPage = new NavigationPage(new FlexPage()); 
         }
 
         protected override void OnStart()
