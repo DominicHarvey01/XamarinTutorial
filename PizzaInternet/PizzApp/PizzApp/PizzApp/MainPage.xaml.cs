@@ -29,7 +29,7 @@ namespace PizzApp
 
             const string url = "https://drive.google.com/uc?export=download&id=1TaB00JR8lTfvxmg9m6k1N_Y4XH0zGwH3";
 
-            string pizzaJson = "";
+            //string pizzaJson = "";
             using (var webClient = new WebClient())
             {
                 try
@@ -37,7 +37,22 @@ namespace PizzApp
 
 
                     //Occuring under main thread.
-                    pizzaJson = webClient.DownloadString(url);
+                    //pizzaJson = webClient.DownloadString(url);
+
+                    webClient.DownloadStringCompleted += (object sender, DownloadStringCompletedEventArgs e) =>
+                    {
+                        Console.WriteLine("Donné télécharger: " + e.Result);
+                        string pizzaJson = e.Result;
+                        List<Pizza> pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            PizzalistView.ItemsSource = pizzas;
+                        });
+
+                    };
+
+
+                    webClient.DownloadStringAsync(new Uri(url));
                     
                 }
                 catch (Exception ex)
@@ -51,19 +66,20 @@ namespace PizzApp
                 }
 
             }
-            pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
+            //pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
 
 
 
 
 
             //preparing binding in xaml
-            PizzalistView.ItemsSource = pizzas;
+            //PizzalistView.ItemsSource = pizzas;
 
         }
 
-
-
-
-}
+        private void test(object sender, DownloadStringCompletedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
