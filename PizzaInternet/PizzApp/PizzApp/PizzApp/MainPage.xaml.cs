@@ -21,65 +21,65 @@ namespace PizzApp
         public MainPage()
         {
             InitializeComponent();
-            /*pizzas = new List<Pizza>();
-            pizzas.Add(new Pizza { Nom = "Végétarienne", Prix = 5, Ingredients = new string[] { "tomate", "poivrons" }, Url = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg" });
-            pizzas.Add(new Pizza { Nom = "ALL DRESSED", Prix = 7, Ingredients = new string[] { "tomate", "poivrons", "pépéronnie", "Olive", "camenbere", "champigion", "camenbere", "champigion", "camenbere", "champigion" }, Url = "https://shawglobalnews.files.wordpress.com/2018/09/pizza-stock.gif?w=720&h=379&crop=1" });
-            pizzas.Add(new Pizza { Nom = "HawaieN", Prix = 7, Ingredients = new string[] { "tomate", "poivrons", "anana" }, Url = "https://www.chicken.ca/assets/RecipePhotos/_resampled/FillWyIxNDQwIiwiNzAwIl0/PizzaMargherita.jpg" });*/
 
+            waitLayout.IsVisible = true;
+            PizzalistView.IsVisible = false;
+            PizzalistView.RefreshCommand = new Command((obj) =>
+            {
+                Console.WriteLine("Refresh command");
+                PizzalistView.IsRefreshing = true;
+                DownloadData((pizzas) =>
+                {
+                    PizzalistView.ItemsSource = pizzas;
+                    PizzalistView.IsRefreshing = false;
+                });
+            });
 
+            DownloadData((pizzas) =>
+            {
+                PizzalistView.ItemsSource = pizzas;
+                PizzalistView.IsVisible = true;
+                waitLayout.IsVisible = false;
+
+            });
+        }
+
+        //downloaddata use "delegate" Action<List<Pizza>> action
+        void DownloadData(Action<List<Pizza>> action)
+        {
             const string url = "https://drive.google.com/uc?export=download&id=1TaB00JR8lTfvxmg9m6k1N_Y4XH0zGwH3";
-
-            //string pizzaJson = "";
             using (var webClient = new WebClient())
             {
-                try
+                webClient.DownloadStringCompleted += (object sender, DownloadStringCompletedEventArgs e) =>
                 {
+                   // Console.WriteLine("Donné télécharger: " + e.Result);
+                   
 
-
-                    //Occuring under main thread.
-                    //pizzaJson = webClient.DownloadString(url);
-
-                    webClient.DownloadStringCompleted += (object sender, DownloadStringCompletedEventArgs e) =>
+                    try
                     {
-                        Console.WriteLine("Donné télécharger: " + e.Result);
                         string pizzaJson = e.Result;
                         List<Pizza> pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
                         Device.BeginInvokeOnMainThread(() =>
-                        {
-                            PizzalistView.ItemsSource = pizzas;
-                        });
-
-                    };
-
-
-                    webClient.DownloadStringAsync(new Uri(url));
-                    
-                }
-                catch (Exception ex)
-                {
-                    // to prevent non display of error message occuring within the network thread.
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        DisplayAlert("Erreur", "Une Erreur est survenue: "+ ex.Message, "ok");
+                            {
+                        action.Invoke(pizzas);
                     });
-                    return;
-                }
+                    }
+                    catch (Exception ex)
+                    {
+                            // to prevent non display of error message occuring within the network thread.
+                            Device.BeginInvokeOnMainThread(() =>
+                        {
+                            DisplayAlert("Erreur", "Une Erreur est survenue: " + ex.Message, "ok");
+                            action.Invoke(null);
+                        });
+                    }
+
+                };
+                webClient.DownloadStringAsync(new Uri(url));
+
+
 
             }
-            //pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
-
-
-
-
-
-            //preparing binding in xaml
-            //PizzalistView.ItemsSource = pizzas;
-
-        }
-
-        private void test(object sender, DownloadStringCompletedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }
