@@ -25,11 +25,19 @@ namespace PizzApp
         }
         e_tri tri = e_tri.TRI_AUCUN;
 
+        const string KEY_TRI = "tri";
+
         private List<Pizza> pizzas;
 
         public MainPage()
         {
             InitializeComponent();
+
+            if (Application.Current.Properties.ContainsKey(KEY_TRI))
+            {
+                tri = (e_tri)Application.Current.Properties[KEY_TRI];
+                sortButton.Source = GetImageSourceFromTri(tri);
+            }
 
             waitLayout.IsVisible = true;
             PizzalistView.IsVisible = false;
@@ -107,6 +115,9 @@ namespace PizzApp
 
             sortButton.Source = GetImageSourceFromTri(tri);
             PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+
+            Application.Current.Properties[KEY_TRI] = (int)tri;
+            Application.Current.SavePropertiesAsync();
 
         }
         private string GetImageSourceFromTri(e_tri t)
