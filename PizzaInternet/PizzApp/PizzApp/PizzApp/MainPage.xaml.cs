@@ -16,6 +16,15 @@ namespace PizzApp
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
+        
+        enum e_tri
+        {
+            TRI_AUCUN,
+            TRI_NOM,
+            TRI_PRIX
+        }
+        e_tri tri = e_tri.TRI_AUCUN;
+
         private List<Pizza> pizzas;
 
         public MainPage()
@@ -30,14 +39,14 @@ namespace PizzApp
                 PizzalistView.IsRefreshing = true;
                 DownloadData((pizzas) =>
                 {
-                    PizzalistView.ItemsSource = pizzas;
+                    PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
                     PizzalistView.IsRefreshing = false;
                 });
             });
 
             DownloadData((pizzas) =>
             {
-                PizzalistView.ItemsSource = pizzas;
+                PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
                 PizzalistView.IsVisible = true;
                 waitLayout.IsVisible = false;
 
@@ -52,26 +61,26 @@ namespace PizzApp
             {
                 webClient.DownloadStringCompleted += (object sender, DownloadStringCompletedEventArgs e) =>
                 {
-                   // Console.WriteLine("Donné télécharger: " + e.Result);
-                   
+                    // Console.WriteLine("Donné télécharger: " + e.Result);
+
 
                     try
                     {
                         string pizzaJson = e.Result;
-                        List<Pizza> pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
+                          pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
                         Device.BeginInvokeOnMainThread(() =>
                             {
-                        action.Invoke(pizzas);
-                    });
+                                action.Invoke(pizzas);
+                            });
                     }
                     catch (Exception ex)
                     {
-                            // to prevent non display of error message occuring within the network thread.
-                            Device.BeginInvokeOnMainThread(() =>
-                        {
-                            DisplayAlert("Erreur", "Une Erreur est survenue: " + ex.Message, "ok");
-                            action.Invoke(null);
-                        });
+                        // to prevent non display of error message occuring within the network thread.
+                        Device.BeginInvokeOnMainThread(() =>
+                    {
+                        DisplayAlert("Erreur", "Une Erreur est survenue: " + ex.Message, "ok");
+                        action.Invoke(null);
+                    });
                     }
 
                 };
@@ -79,6 +88,62 @@ namespace PizzApp
 
 
 
+            }
+        }
+
+        private void SortButton_Clicked(object sender, EventArgs e)
+        {
+            if (tri == e_tri.TRI_AUCUN)
+            {
+                tri = e_tri.TRI_NOM;
+            } else if (tri == e_tri.TRI_NOM)
+            {
+                tri = e_tri.TRI_PRIX;
+            }
+            else if (tri == e_tri.TRI_PRIX)
+            {
+                tri = e_tri.TRI_AUCUN;
+            }
+
+            sortButton.Source = GetImageSourceFromTri(tri);
+            PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+
+        }
+        private string GetImageSourceFromTri(e_tri t)
+        {
+            switch (t) {
+                case e_tri.TRI_NOM:
+                    return "sort_nom.png";
+                case e_tri.TRI_PRIX:
+                    return "sort_prix.png";
+                default:
+                    return "sort_none.png";
+            }
+
+        }
+
+        private List<Pizza> GetPizzasFromTri(e_tri t, List<Pizza> l)
+        {
+            if (l == null) return null;
+
+            switch (t)
+            {
+                case e_tri.TRI_NOM:
+                    {
+                        List<Pizza> ret = new List<Pizza>(l);
+                        ret.Sort((p1, p2) => { return p1.Title.CompareTo(p2.Title); });
+                        return ret;
+                    }
+                    
+                case e_tri.TRI_PRIX:
+                    {
+                        List<Pizza> ret = new List<Pizza>(l);
+                        ret.Sort((p1, p2) => { return p2.Prix.CompareTo(p1.Prix); });
+                        return ret;
+                    }
+
+                default:
+                    return l;
             }
         }
     }
