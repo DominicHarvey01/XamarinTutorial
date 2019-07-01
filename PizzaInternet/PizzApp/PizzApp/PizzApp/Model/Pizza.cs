@@ -14,7 +14,7 @@ namespace PizzApp.Model
         public string PrixStr { get { return Prix + "$"; } }
         public string IngredientsStr { get {return String.Join(", ",Ingredients); }}
 
-        public string Url { get; set; }
+        public string imageUrl { get; set; }
 
         //public string Title{ get { return StringExtension.PremiereLettreMajuscule(Nom); }}
         public string Title { get { return Nom.PremiereLettreMajuscule(); } }

@@ -39,7 +39,7 @@
                             Grid.Column="0" 
                             Aspect="AspectFill"
                             Margin="10,15,5,15"
-                            Source="{Binding Url}"
+                            Source="{Binding imageUrl}"
                             BackgroundColor="#F0F0F0F"/>
                         
                         <StackLayout 
