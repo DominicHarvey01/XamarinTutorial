@@ -3,11 +3,13 @@ using PizzApp.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+
 
 namespace PizzApp
 {
@@ -16,7 +18,7 @@ namespace PizzApp
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        
+
         enum e_tri
         {
             TRI_AUCUN,
@@ -27,11 +29,17 @@ namespace PizzApp
 
         const string KEY_TRI = "tri";
 
+        string tempFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "temp");
+        string jsonFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "pizzas.json");
+
+
+
         private List<Pizza> pizzas;
 
         public MainPage()
         {
             InitializeComponent();
+            
 
             if (Application.Current.Properties.ContainsKey(KEY_TRI))
             {
@@ -41,60 +49,89 @@ namespace PizzApp
 
             waitLayout.IsVisible = true;
             PizzalistView.IsVisible = false;
+            BindRefrehCommand();
+
+            if (File.Exists(jsonFileName))
+            {
+                string pizzaJson = File.ReadAllText(jsonFileName);
+    
+                if (!String.IsNullOrEmpty(pizzaJson))
+                {
+                    pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
+                    PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+                    PizzalistView.IsVisible = true;
+                    waitLayout.IsVisible = false;
+                }
+            }
+            DownloadData((pizzas) =>
+            {
+                if (pizzas != null)
+                {
+                    PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+                }
+                
+                waitLayout.IsVisible = false;
+                PizzalistView.IsVisible = true;
+
+            });
+        }
+
+        private void BindRefrehCommand()
+        {
             PizzalistView.RefreshCommand = new Command((obj) =>
             {
                 Console.WriteLine("Refresh command");
                 PizzalistView.IsRefreshing = true;
                 DownloadData((pizzas) =>
                 {
-                    PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+                    if (pizzas != null)
+                    {
+                        PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+                    }
                     PizzalistView.IsRefreshing = false;
                 });
-            });
-
-            DownloadData((pizzas) =>
-            {
-                PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
-                PizzalistView.IsVisible = true;
-                waitLayout.IsVisible = false;
-
             });
         }
 
         //downloaddata use "delegate" Action<List<Pizza>> action
         void DownloadData(Action<List<Pizza>> action)
         {
+            Console.WriteLine("+++ ETAPE 4");
             const string url = "https://drive.google.com/uc?export=download&id=1TaB00JR8lTfvxmg9m6k1N_Y4XH0zGwH3";
             using (var webClient = new WebClient())
             {
-                webClient.DownloadStringCompleted += (object sender, DownloadStringCompletedEventArgs e) =>
+
+                webClient.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
                 {
-                    // Console.WriteLine("Donné télécharger: " + e.Result);
+                    //webClient.DownloadStringCompleted += (object sender, DownloadStringCompletedEventArgs e) =>
 
+                    Console.WriteLine("+++ ETAPE 5");
 
-                    try
+                    Exception ex = e.Error;
+                    if (ex == null)
                     {
-                        string pizzaJson = e.Result;
-                          pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
+                        File.Copy(tempFileName, jsonFileName, true);
+
+                        Console.WriteLine("+++ ETAPE 6");
+                        string pizzaJson = File.ReadAllText(jsonFileName);
+                        pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
+
                         Device.BeginInvokeOnMainThread(() =>
-                            {
-                                action.Invoke(pizzas);
-                            });
+                        {
+                            action.Invoke(pizzas);
+                        });
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        // to prevent non display of error message occuring within the network thread.
-                        Device.BeginInvokeOnMainThread(() =>
-                    {
-                        DisplayAlert("Erreur", "Une Erreur est survenue: " + ex.Message, "ok");
-                        action.Invoke(null);
-                    });
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("Erreur", "Une Erreur est survenue: " + ex.Message, "ok");
+                            action.Invoke(null);
+                        });
                     }
-
                 };
-                webClient.DownloadStringAsync(new Uri(url));
-
-
+                
+                webClient.DownloadFileAsync(new Uri(url), tempFileName);
 
             }
         }
@@ -104,7 +141,8 @@ namespace PizzApp
             if (tri == e_tri.TRI_AUCUN)
             {
                 tri = e_tri.TRI_NOM;
-            } else if (tri == e_tri.TRI_NOM)
+            }
+            else if (tri == e_tri.TRI_NOM)
             {
                 tri = e_tri.TRI_PRIX;
             }
@@ -122,7 +160,8 @@ namespace PizzApp
         }
         private string GetImageSourceFromTri(e_tri t)
         {
-            switch (t) {
+            switch (t)
+            {
                 case e_tri.TRI_NOM:
                     return "sort_nom.png";
                 case e_tri.TRI_PRIX:
@@ -145,7 +184,7 @@ namespace PizzApp
                         ret.Sort((p1, p2) => { return p1.Title.CompareTo(p2.Title); });
                         return ret;
                     }
-                    
+
                 case e_tri.TRI_PRIX:
                     {
                         List<Pizza> ret = new List<Pizza>(l);
