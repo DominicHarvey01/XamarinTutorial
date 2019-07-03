@@ -23,11 +23,13 @@ namespace PizzApp
         {
             TRI_AUCUN,
             TRI_NOM,
-            TRI_PRIX
+            TRI_PRIX,
+            TRI_FAV
         }
         e_tri tri = e_tri.TRI_AUCUN;
 
         const string KEY_TRI = "tri";
+        const string KEY_FAV = "fav";
 
         string tempFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "temp");
         string jsonFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "pizzas.json");
@@ -35,11 +37,17 @@ namespace PizzApp
 
 
         private List<Pizza> pizzas;
+        List<string> pizzaFav = new List<string>();
 
         public MainPage()
         {
             InitializeComponent();
-            
+            /*pizzaFav.Add("3 fromages");
+            pizzaFav.Add("indienne");
+            pizzaFav.Add("tartiflette");*/
+            LoadFavlist();
+
+
 
             if (Application.Current.Properties.ContainsKey(KEY_TRI))
             {
@@ -54,11 +62,11 @@ namespace PizzApp
             if (File.Exists(jsonFileName))
             {
                 string pizzaJson = File.ReadAllText(jsonFileName);
-    
+
                 if (!String.IsNullOrEmpty(pizzaJson))
                 {
                     pizzas = JsonConvert.DeserializeObject<List<Pizza>>(pizzaJson);
-                    PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+                    PizzalistView.ItemsSource = GetPizzaCells(GetPizzasFromTri(tri, pizzas), pizzaFav);
                     PizzalistView.IsVisible = true;
                     waitLayout.IsVisible = false;
                 }
@@ -67,9 +75,9 @@ namespace PizzApp
             {
                 if (pizzas != null)
                 {
-                    PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+                    PizzalistView.ItemsSource = GetPizzaCells(GetPizzasFromTri(tri, pizzas), pizzaFav);
                 }
-                
+
                 waitLayout.IsVisible = false;
                 PizzalistView.IsVisible = true;
 
@@ -86,7 +94,7 @@ namespace PizzApp
                 {
                     if (pizzas != null)
                     {
-                        PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+                        PizzalistView.ItemsSource = GetPizzaCells(GetPizzasFromTri(tri, pizzas), pizzaFav);
                     }
                     PizzalistView.IsRefreshing = false;
                 });
@@ -130,7 +138,7 @@ namespace PizzApp
                         });
                     }
                 };
-                
+
                 webClient.DownloadFileAsync(new Uri(url), tempFileName);
 
             }
@@ -148,11 +156,14 @@ namespace PizzApp
             }
             else if (tri == e_tri.TRI_PRIX)
             {
+                tri = e_tri.TRI_FAV;
+            } else if (tri == e_tri.TRI_FAV)
+            {
                 tri = e_tri.TRI_AUCUN;
             }
-
+             
             sortButton.Source = GetImageSourceFromTri(tri);
-            PizzalistView.ItemsSource = GetPizzasFromTri(tri, pizzas);
+            PizzalistView.ItemsSource = GetPizzaCells(GetPizzasFromTri(tri, pizzas), pizzaFav);
 
             Application.Current.Properties[KEY_TRI] = (int)tri;
             Application.Current.SavePropertiesAsync();
@@ -164,8 +175,13 @@ namespace PizzApp
             {
                 case e_tri.TRI_NOM:
                     return "sort_nom.png";
+
                 case e_tri.TRI_PRIX:
                     return "sort_prix.png";
+
+                case e_tri.TRI_FAV:
+                    return "sort_fav.png";
+
                 default:
                     return "sort_none.png";
             }
@@ -179,6 +195,7 @@ namespace PizzApp
             switch (t)
             {
                 case e_tri.TRI_NOM:
+                case e_tri.TRI_FAV:
                     {
                         List<Pizza> ret = new List<Pizza>(l);
                         ret.Sort((p1, p2) => { return p1.Title.CompareTo(p2.Title); });
@@ -191,10 +208,69 @@ namespace PizzApp
                         ret.Sort((p1, p2) => { return p2.Prix.CompareTo(p1.Prix); });
                         return ret;
                     }
+                 
 
                 default:
                     return l;
             }
         }
+        private void OnFavPizzaChanged(PizzaCell pizzaCell)
+        {
+            bool isInFavList = pizzaFav.Contains(pizzaCell.pizza.Nom);
+
+            if (pizzaCell.isFavorite && !isInFavList)
+            {
+                pizzaFav.Add(pizzaCell.pizza.Nom);
+                SaveFavlist();
+            }
+            else if (!pizzaCell.isFavorite && isInFavList)
+            {
+                pizzaFav.Remove(pizzaCell.pizza.Nom);
+                SaveFavlist();
+            }
+
+
+        }
+        private List<PizzaCell> GetPizzaCells(List<Pizza> p, List<string> f)
+        {
+            List<PizzaCell> ret = new List<PizzaCell>();
+            if (p == null)
+            {
+                return ret;
+            }
+            foreach (Pizza pizza in p)
+            {
+                bool isFav = f.Contains(pizza.Nom);
+                if (tri == e_tri.TRI_FAV)
+                {
+                    if (isFav)
+                    {
+                        ret.Add(new PizzaCell { pizza = pizza, isFavorite = isFav, FavChangedAction = OnFavPizzaChanged });
+                    }
+                    
+                } else
+                {
+                    ret.Add(new PizzaCell { pizza = pizza, isFavorite = isFav, FavChangedAction = OnFavPizzaChanged });
+                }
+                
+            }
+
+            return ret;
+        }
+        private void SaveFavlist() {
+            string json = JsonConvert.SerializeObject(pizzaFav);
+            Application.Current.Properties[KEY_FAV] = json;
+            Application.Current.SavePropertiesAsync();
+        }
+
+        private void LoadFavlist() {
+            if (Application.Current.Properties.ContainsKey(KEY_FAV))
+            {
+                string json = Application.Current.Properties[KEY_FAV].ToString();
+                pizzaFav = JsonConvert.DeserializeObject<List<string>>(json);
+            }
+        }
     }
+   
 }
+

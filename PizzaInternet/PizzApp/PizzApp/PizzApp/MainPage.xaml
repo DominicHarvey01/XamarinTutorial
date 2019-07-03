@@ -55,7 +55,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid>
+                        <Grid Margin="0,0,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
@@ -70,7 +70,7 @@
                                 Grid.Column="0" 
                                 Aspect="AspectFill"
                                 Margin="10,15,5,15"
-                                Source="{Binding imageUrl}"
+                                Source="{Binding pizza.imageUrl}"
                                 BackgroundColor="#F0F0F0F"/>
 
                             <StackLayout 
@@ -81,24 +81,48 @@
                                 HorizontalOptions="FillAndExpand">
 
                                 <Label 
-                                    Text="{Binding Title}" 
+                                    Text="{Binding pizza.Title}" 
                                     TextColor="Black" 
                                     FontSize="24" />
 
                                 <Label 
-                                    Text="{Binding IngredientsStr}" 
+                                    Text="{Binding pizza.IngredientsStr}" 
                                     TextColor="#555555" 
                                     MaxLines="2"
                                     LineBreakMode="TailTruncation"
                                     FontSize="16" />
                             </StackLayout>
 
-                            <Label Grid.Row="0" 
-                               Grid.Column="2" 
-                               VerticalOptions="Center"
-                               Text="{Binding PrixStr }" 
-                               TextColor="Black" 
-                               FontSize="20" />
+
+
+
+                            <Grid Grid.Row="0" Grid.Column="2"  VerticalOptions="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="30" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="50" />
+
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="End"
+                                    Text="{Binding pizza.PrixStr }" 
+                                    TextColor="Black" 
+                                    FontSize="20" />
+
+                                <ImageButton Grid.Row="1" Grid.Column="0"
+                                   HeightRequest="30"
+                                    WidthRequest="30"
+                                    Source="{Binding ImageSourceFav}"
+                                   
+                                    Command="{Binding FavClickCommand}"
+                                    CommandParameter="{Binding pizza}"
+                                    BackgroundColor="Transparent"/>
+                            </Grid>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
